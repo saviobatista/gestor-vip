@@ -1,23 +1,37 @@
-import React from "react";
-import Link from "next/link";
-import { getProvedor } from '../../lib/provedor'
-// layout for page
+import { useState } from 'react'
+import useSWR from 'swr'
+import Auth from "layouts/Auth.js"
+import Link from 'next/link'
+import useUser from '../lib/useUser'
+import fetchJson from '../lib/fetchJson'
 
-import Auth from "layouts/Auth.js";
+const fetcher = (...args) => fetch(...args).then(res => res.json())
 
-const entrar = async e => {
-  e.preventDefault()
-  const res = await fetch('/api/auth/login',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(e.currentTarget).entries())) })
-  if(res.status==200) {
-    const data = await res.text()
-    alert('entrou' + data)
-  } else {
-    const data = await res.text()
-    alert('error'+data)
+const setErrorMsg = text => alert(text)
+
+const Login = () => {
+  const { mutateUser } = useUser({ redirectTo: '##HOME##', redirectIfFound: true, })
+  const { data, error } = useSWR('/api/provedor/public', fetcher)
+  const [errorMsg, setErrorMsg] = useState('')
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+    try {
+      await mutateUser(
+        fetchJson('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:JSON.stringify(Object.fromEntries(new FormData(e.currentTarget).entries())),
+        })
+      )
+    } catch (error) {
+      console.error('ERRO FATAL:', error.data.message)
+      setErrorMsg(error.data.message)
+    }
   }
-}
 
-export default function Login({ provedor }) {
   return (
     <>
       <div className="container mx-auto px-4 h-full">
@@ -27,16 +41,21 @@ export default function Login({ provedor }) {
               <div className="rounded-t mb-0 px-6 py-6">
                 <div className="text-center mb-3">
                   <h6 className="text-blueGray-500 text-sm font-bold">
-                    <img src={provedor.logo} />
+                    <img src={data.logo} />
                   </h6>
                 </div>
                 <hr className="mt-6 border-b-1 border-blueGray-300" />
+                {errorMsg && <div className="text-white px-6 py-4 border-0 rounded relative mb-4 bg-red-500">
+                  <span className="inline-block align-middle mr-8">
+                  <span className="text-xl"><i className="fas fa-bell"></i></span> <b className="capitalize">{errorMsg}</b> 
+                  </span>
+                </div>}
               </div>
               <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                 <div className="text-blueGray-400 text-center mb-3 font-bold">
                   <small>Acesse com seus dados</small>
                 </div>
-                <form onSubmit={entrar}>
+                <form onSubmit={handleSubmit}>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -66,19 +85,6 @@ export default function Login({ provedor }) {
                       name="senha"
                     />
                   </div>
-                  <div>
-                    <label className="inline-flex items-center cursor-pointer">
-                      <input
-                        id="customCheckLogin"
-                        type="checkbox"
-                        className="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
-                        name="continuar"
-                      />
-                      <span className="ml-2 text-sm font-semibold text-blueGray-600">
-                        Continuar conectado
-                      </span>
-                    </label>
-                  </div>
 
                   <div className="text-center mt-6">
                     <button
@@ -98,7 +104,7 @@ export default function Login({ provedor }) {
                   onClick={(e) => e.preventDefault()}
                   className="text-blueGray-200"
                 >
-                  <small>Forgot password?</small>
+                  <small>Esquecu a senha?</small>
                 </a>
               </div>
               <div className="w-1/2 text-right">
@@ -113,12 +119,9 @@ export default function Login({ provedor }) {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 Login.layout = Auth;
 
-export async function getServerSideProps({ req, res }) {
-  const provedor = await getProvedor(req.headers.host)
-  return { props: { provedor } }
-}
+export default Login
