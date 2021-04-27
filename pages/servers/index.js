@@ -2,18 +2,13 @@ import React from "react"
 import useSWR from 'swr'
 
 // components
-
-import CardLineChart from "components/Cards/CardLineChart.js";
-import CardBarChart from "components/Cards/CardBarChart.js";
-import CardPageVisits from "components/Cards/CardPageVisits.js";
-import CardSocialTraffic from "components/Cards/CardSocialTraffic.js";
 import CardStats from "components/Cards/CardStats.js";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FooterAdmin from "components/Footers/FooterAdmin.js";
 
 
-export default function Dashboard() {
+export default function Servidores() {
   const { data, error } = useSWR('/api/dashboard', (...args) => fetch(...args).then(res => res.json()))
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading...</div>
@@ -24,89 +19,6 @@ export default function Dashboard() {
       <div className="relative md:ml-64 bg-blueGray-100">
         <AdminNavbar />
         {/* Header */}
-        <div className="relative bg-blueGray-800 md:pt-32 pb-32 pt-12">
-          <div className="px-4 md:px-10 mx-auto w-full">
-            <div>
-              <div className="flex flex-wrap">
-                <div className="w-full lg:w-4/12 xl:w-2/12 px-4">
-                  <CardStats
-                    statSubtitle="Conexões"
-                    statTitle={data.conexoes}
-                    statArrow=""
-                    statPercent={data.conexoes_percent}
-                    statPercentColor=""
-                    statDescripiron="das conexões permitidas"
-                    statIconName="far fa-wifi"
-                    statIconColor="bg-indigo-500"
-                  />
-                </div>
-                <div className="w-full lg:w-4/12 xl:w-2/12 px-4">
-                  <CardStats
-                    statSubtitle="Tráfego entrada"
-                    statTitle={data.input_label}
-                    statArrow=""
-                    statPercent={data.input_percent}
-                    statPercentColor=""
-                    statDescripiron="da capacidade"
-                    statIconName="far fa-upload"
-                    statIconColor="bg-pink-500"
-                  />
-                </div>
-                <div className="w-full lg:w-4/12 xl:w-2/12 px-4">
-                  <CardStats
-                    statSubtitle="Tráfego saída"
-                    statTitle={data.output_label}
-                    statArrow=""
-                    statPercent={data.output_percent}
-                    statPercentColor=""
-                    statDescripiron="da capacidade"
-                    statIconName="far fa-download"
-                    statIconColor="bg-lightBlue-500"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-wrap mt-8">
-                <div className="w-full lg:w-4/12 xl:w-2/12 px-4">
-                  <CardStats
-                    statSubtitle="Clientes online"
-                    statTitle={data.clientes}
-                    statArrow=""
-                    statPercent={data.clientes_percent}
-                    statPercentColor=""
-                    statDescripiron="do total"
-                    statIconName="far fa-users"
-                    statIconColor="bg-orange-500"
-                  />
-                </div>
-                <div className="w-full lg:w-4/12 xl:w-2/12 px-4">
-                  <CardStats
-                    statSubtitle="Streams ONLINE"
-                    statTitle={data.online}
-                    statArrow=""
-                    statPercent={data.online_percent}
-                    statPercentColor=""
-                    statDescripiron="dos streams"
-                    statIconName="far fa-video"
-                    statIconColor="bg-emerald-500"
-                  />
-                </div>
-                <div className="w-full lg:w-4/12 xl:w-2/12 px-4">
-                  <CardStats
-                    statSubtitle="Streams OFFLINE"
-                    statTitle={data.offline}
-                    statArrow=""
-                    statPercent={data.offline_percent}
-                    statPercentColor=""
-                    statDescripiron="dos streams"
-                    statIconName="far fa-video-slash"
-                    statIconColor="bg-red-500"
-                  />
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
           <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
             <div className="rounded-t mb-0 px-4 py-3 border-0">
