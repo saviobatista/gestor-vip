@@ -20,7 +20,6 @@ export default withSession(async (req, res) => {
   try {
     const ip = require('request-ip').getClientIp(req)
     const provedor = await getProvedor(req.headers.host)
-    var inicio = new Date();
     const mysql = require('serverless-mysql')({ config: { host: provedor.dbhost, port: provedor.dbport, database: provedor.dbname, user: provedor.dbuser, password: provedor.dbpass } })
     //SQL1
     const sql_geral = `SELECT
@@ -43,10 +42,7 @@ export default withSession(async (req, res) => {
       ORDER BY streaming_servers.id ASC`
     //IFNULL((SELECT COUNT(streams_sys.server_stream_id) FROM streams_sys LEFT JOIN streams ON streams.id = streams_sys.stream_id WHERE server_id = streaming_servers.id AND stream_status <> 2 AND type IN (1,3)),0) AS total_streams,
     //Geral
-    let pi1 = await new Date()
     const query1 = await mysql.query(sql_geral)
-    let pf1 = new Date()
-    console.log("QUERY 1: "+((pf1 - pi1) / 1000))
     //Dados de retorno
     let dados = {
       conexoes: query1[0].conexoes,
@@ -65,10 +61,7 @@ export default withSession(async (req, res) => {
     dados.total_users = query1[0].total_users
     dados.online_users = query1[0].online_users
     //Por servidor
-    let pi2 = new Date()
     const query2 = await mysql.query(sql_servidores)
-    let pf2 = new Date()
-    console.log("QUERY 2: "+((pf2 - pi2) / 1000))
     for (const row of query2) {
       //Watchdog data
       let watchdog = JSON.parse(row.watchdog_data)
@@ -101,8 +94,6 @@ export default withSession(async (req, res) => {
     dados.online_percent = Math.floor(dados.online_streams / (dados.online_streams + dados.offline_streams) * 100)
     dados.offline_percent = Math.floor(dados.offline_streams / (dados.online_streams + dados.offline_streams) * 100)
     //Result
-    var fim = new Date()
-    console.log((fim - inicio) / 1000)
     res.json(dados)
   } catch (error) {
     console.log(error)

@@ -1,10 +1,10 @@
 {
-  "name": "notus-nextjs",
-  "homepage": "https://demos.creative-tim.com/notus-nextjs",
+  "name": "gestor-vip",
+  "homepage": "https://www.gestor.vip/",
   "version": "1.1.0",
-  "description": "Notus NextJS - A free Tailwind CSS, NextJS and React Ui Kit and Admin by Creative Tim.",
-  "repository": "https://github.com/creativetimofficial/notus-nextjs",
-  "license": "MIT",
+  "description": "Sistema de gestão para streaming providers",
+  "repository": "https://github.com/saviobatista/gestor-vip",
+  "license": "Commercial",
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.3",
     "@popperjs/core": "2.9.1",
@@ -18,6 +18,7 @@
     "next-iron-session": "^4.1.13",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-hook-form": "^7.3.5",
     "react-scripts": "4.0.3",
     "request-ip": "^2.1.3",
     "serverless-mysql": "^1.5.4",
