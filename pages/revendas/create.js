@@ -1,8 +1,8 @@
 import React from "react"
 import { useRouter } from 'next/router'
 //import useAuth from '../../../lib/useAuth'
-import Form from "components/Servers/Form.js"
+import RevendaForm from "components/Revendas/RevendaForm.js"
 
 export default function UpdateProvedores() {
-    return ( <Form /> )
+    return ( <RevendaForm /> )
 }
