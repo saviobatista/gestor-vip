@@ -95,7 +95,7 @@ export default function Revendas() {
                           {obj.clientes}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
-                          {obj.ultimo_login}
+                          {obj.ultimo_login && new Date(obj.ultimo_login).toLocaleDateString()}
                         </td>
                         <td>
                           <Link href={'/revendas/' + obj.id + '/update'}>

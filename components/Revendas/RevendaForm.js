@@ -1,6 +1,8 @@
-import React, { useEffect, useRef }  from "react"
+import React, { useEffect, useRef } from "react"
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
+import fetcher from '../../lib/fetchJson'
+import useSWR from 'swr'
 // components
 import AdminNavbar from "components/Navbars/AdminNavbar.js"
 import Sidebar from "components/Sidebar/Sidebar.js"
@@ -9,13 +11,7 @@ import FooterAdmin from "components/Footers/FooterAdmin.js"
 export default function RevendaForm({ id }) {
   const { handleSubmit, register, reset } = useForm()
   useEffect(() => {
-    fetch(`api/util/options/member_groups`).then(r=>{
-      console.log(r)
-      r.forEach(value=>{
-        
-      })
-    })
-    if(id)fetch(`/api/revendas/${id}`).then((r) => {
+    if (id) fetch(`/api/revendas/${id}`).then((r) => {
       console.log('FETCH')
       console.log(r)
       r.json().then(data => {
@@ -27,7 +23,15 @@ export default function RevendaForm({ id }) {
       alert('ERRO AO CARREGAR ' + error)
     })
   }, [reset, id])
+  const { data, error } = useSWR('api/form/revenda', fetcher)
+  if(error)return ( <h1>ERRO FATAL! {error}</h1> )
+  if(!data)return ( <p>Carregando...</p> )
+  console.log('passou')
+  console.log(data)
+  
   const onSubmit = handleSubmit(async (formData) => {
+    return false
+    console.log(formData)
   })
   return (
     <div>
@@ -122,8 +126,10 @@ export default function RevendaForm({ id }) {
                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                             {...register('member_group_id')}
                           >
-                              <option value="">-</option>
-                            </select>
+                          {data.member_groups?.map(obj=>
+                            <option key={obj.key} value={obj.key}>{obj.value}</option>
+                          )}
+                          </select>
                         </div>
                       </div>
                       <div className="w-full lg:w-6/12 px-4">
@@ -138,8 +144,11 @@ export default function RevendaForm({ id }) {
                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                             {...register('owner_id')}
                           >
-                              <option value="">-</option>
-                            </select>
+                            <option value="">-</option>
+                          {data.owners?.map(obj=>
+                            <option key={obj.key} value={obj.key}>{obj.value}</option>
+                          )}
+                          </select>
                         </div>
                       </div>
 
