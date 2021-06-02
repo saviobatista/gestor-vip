@@ -34,9 +34,9 @@ export default function Clientes() {
               </h3>
                 </div>
                 <div className="relative flex w-1/4 flex-wrap items-stretch">
-                          <Link href={'/clientes/create'}>
-                  <button className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                    + Novo
+                  <Link href={'/clientes/create'}>
+                    <button className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                      + Novo
                   </button></Link>
                 </div>
               </div>
@@ -69,9 +69,6 @@ export default function Clientes() {
                     <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
                       Conexões
                     </th>
-                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
-                      Informações
-                    </th>
                     <th>&nbsp;</th>
                   </tr>
                 </thead>
@@ -89,7 +86,7 @@ export default function Clientes() {
                           {obj.dono}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                        <i className={`fas fa-circle text-${obj.status=='Ativo'?'emerald':obj.status=='Expirado'?'orange':'red'}-500 mr-2`}></i> {obj.status}
+                          <i className={`fas fa-circle text-${obj.status == 'Ativo' ? 'emerald' : obj.status == 'Expirado' ? 'orange' : 'red'}-500 mr-2`}></i> {obj.status}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
                           {obj.tipo}
@@ -103,7 +100,38 @@ export default function Clientes() {
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center">
                           {obj.conexoes}
                         </td>
-                        <td>&nbsp;</td>
+                        <td>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-unlock-alt" title="Destravar provedor"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-fingerprint" title="Travar provedor"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-calendar-plus" title="Extender"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-edit" title="Editar"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-download" title="Baixar playlist"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-skull" title="Derrubar conexões ativas"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-user-slash" title="Banir usuário"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-user-lock" title="Bloquear usuário"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-user-check" title="Desbloquear usuário"></i>
+                          </button>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-trash" title="Excluir"></i>
+                          </button>
+                        </td>
                       </tr>
                     )
                   })}

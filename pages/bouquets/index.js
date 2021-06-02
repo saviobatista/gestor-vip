@@ -34,9 +34,9 @@ export default function Bouquets() {
               </h3>
                 </div>
                 <div className="relative flex w-1/4 flex-wrap items-stretch">
-                          <Link href={'/bouquets/create'}>
-                  <button className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                    + Novo
+                  <Link href={'/bouquets/create'}>
+                    <button className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                      + Novo
                   </button></Link>
                 </div>
               </div>
@@ -73,7 +73,14 @@ export default function Bouquets() {
                           {obj.series}
                         </td>
                         <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                          BOTOES
+                          <Link href={'/bouquets/' + obj.id + '/update'}>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-pen" title="Editar"></i>
+                          </button>
+                          </Link>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-trash" title="Excluir"></i>
+                          </button>
                         </td>
                       </tr>
                     )

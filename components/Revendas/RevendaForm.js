@@ -23,12 +23,13 @@ export default function RevendaForm({ id }) {
       alert('ERRO AO CARREGAR ' + error)
     })
   }, [reset, id])
-  const { data, error } = useSWR('api/form/revenda', fetcher)
-  if(error)return ( <h1>ERRO FATAL! {error}</h1> )
-  if(!data)return ( <p>Carregando...</p> )
-  console.log('passou')
-  console.log(data)
-  
+  var { data, error } = useSWR('/api/util/member_groups', fetcher)
+  if(error)return ( <p>{error}</p> )
+  const member_groups = data
+  var { data, error } = useSWR('/api/util/owners', fetcher)
+  if(error)return ( <p>{error}</p> )
+  const owners = data
+  if(!member_groups||!owners)return ( <p>Carregando...</p> )
   const onSubmit = handleSubmit(async (formData) => {
     return false
     console.log(formData)
@@ -126,8 +127,8 @@ export default function RevendaForm({ id }) {
                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                             {...register('member_group_id')}
                           >
-                          {data.member_groups?.map(obj=>
-                            <option key={obj.key} value={obj.key}>{obj.value}</option>
+                          {member_groups?.map(obj=>
+                            <option key={obj.value} value={obj.value}>{obj.text}</option>
                           )}
                           </select>
                         </div>
@@ -145,8 +146,8 @@ export default function RevendaForm({ id }) {
                             {...register('owner_id')}
                           >
                             <option value="">-</option>
-                          {data.owners?.map(obj=>
-                            <option key={obj.key} value={obj.key}>{obj.value}</option>
+                          {owners.map(obj=>
+                            <option key={obj.value} value={obj.value}>{obj.text}</option>
                           )}
                           </select>
                         </div>

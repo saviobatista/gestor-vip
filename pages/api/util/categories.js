@@ -1,21 +1,16 @@
-import { getProvedor } from '../../../../lib/provedor'
-import withSession from '../../../../lib/session'
+import { getProvedor } from '../../../lib/provedor'
+import withSession from '../../../lib/session'
 
 export default withSession(async (req, res) => {
 	try {
 		const { query: { id }, headers: { host }} = req
 		const provedor = await getProvedor(host)
 		const mysql = require('serverless-mysql')({ config: { host: provedor.dbhost, port: provedor.dbport, database: provedor.dbname, user: provedor.dbuser, password: provedor.dbpass } })
-    var retorno = {
-      member_groups:[],
-      owners:[]
-    }
-		//Member groups
-		retorno.member_groups = await mysql.query(`SELECT group_id AS key, group_name AS value FROM member_groups ORDER BY group_name ASC`)
-    //Owners
-    retorno.owners = await mysql.query(`SELECT id AS key, username AS value FROM reg_users WHERE (is_admin = 1 OR is_reseller = 1) ORDER BY username ASC`)
+		//Query
+		const query = await mysql.query(`SELECT id AS value, category_name AS text FROM stream_categories ORDER BY category_name ASC`)
+        if(!query.length) throw new Error('Registro não encontrado')
 		//Dados de retorno
-		res.json(retorno)
+		res.json(query)
 	} catch (error) {
 		console.log(error)
 		const { response: fetchResponse } = error

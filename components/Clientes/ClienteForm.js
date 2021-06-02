@@ -318,24 +318,25 @@ export default function RevendaForm({ id }) {
                       Bouquets
                       </h6>
                     <div className="flex flex-wrap">
-                    <div className="w-full lg:w-6/12 px-4">
-                      <div className="relative w-full mb-3">
-                        <label
-                          className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                          htmlFor="grid-password"
-                        >
-                          Bouquets
+                      <div className="w-full lg:w-6/12 px-4">
+                        <div className="relative w-full mb-3">
+                          <label
+                            className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                            htmlFor="grid-password"
+                          >
+                            Bouquets
                           </label>
-                        <label><input
-                          type="checkbox"
-                          className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
-                          {...register('access_output[]')}
-                          value="1"
-                        />
+                          <label><input
+                            type="checkbox"
+                            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+                            {...register('access_output[]')}
+                            value="1"
+                          />
                           BOUTQUET</label>
+                        </div>
                       </div>
-                    </div>
 
+                    </div>
                   </div>
                 </div>
               </form>

@@ -7,25 +7,18 @@ import AdminNavbar from "components/Navbars/AdminNavbar.js"
 import Sidebar from "components/Sidebar/Sidebar.js"
 import FooterAdmin from "components/Footers/FooterAdmin.js"
 
-export default function SerieForm({ id }) {
+export default function FilmeForm({ id }) {
   const { handleSubmit, register, reset } = useForm()
   useEffect(() => {
-    fetch(`api/util/options/member_groups`).then(r => {
-      console.log(r)
-      /*r.forEach(value => {
-
-      })*/
-    })
-    if (id) fetch(`/api/series/${id}`).then((r) => {
+    if (id) fetch(`/api/filmes/${id}`).then((r) => {
       r.json().then(data => {
         reset(data)
       })
     }).catch(error => {
       console.log(error)
-      alert('ERRO AO CARREGAR ' + error)
+      return <div>ERRO AO CARREGAR {error}</div>
     })
   }, [reset, id])
-
   var { data, error } = useSWR('/api/util/categories', (...args) => fetch(...args).then(res => res.json()))
   const categorias = data
   var e1 = error
@@ -35,6 +28,7 @@ export default function SerieForm({ id }) {
 
 	if (e1||e2) return <div>failed to load</div>
 	if (!categorias||!bouquets) return <div>loading...</div>
+  console.log('c')
   const onSubmit = handleSubmit(async (formData) => {
   })
   return (
@@ -52,8 +46,8 @@ export default function SerieForm({ id }) {
                 <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
                   <div className="rounded-t bg-white mb-0 px-6 py-6">
                     <div className="text-center flex justify-between">
-                      <h6 className="text-blueGray-700 text-xl font-bold">Série</h6>
-                      <Link href="/series">
+                      <h6 className="text-blueGray-700 text-xl font-bold">Filme</h6>
+                      <Link href="/filmes">
                         <button
                           className="bg-blueGray-700 active:bg-blueGray-600 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
                           type="button"
@@ -79,51 +73,13 @@ export default function SerieForm({ id }) {
                             className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                             htmlFor="grid-password"
                           >
-                            Série
+                            Bouquet
                             </label>
                           <input
                             type="text"
                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                            {...register('title')}
+                            {...register('bouquet_name')}
                           />
-                        </div>
-                      </div>
-                      <div className="w-full lg:w-6/12 px-4">
-                        <div className="relative w-full mb-3">
-                          <label
-                            className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                            htmlFor="grid-password"
-                          >
-                            Categoria
-                            </label>
-                          <select
-                            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                            {...register('category_id')}
-                          >
-                            {categorias.map(obj=>
-                            <option key={obj.value} value={obj.value}>{obj.text}</option>
-                            )}
-                          </select>
-                        </div>
-                      </div>
-                      <div className="w-full lg:w-6/12 px-4">
-                        <div className="relative w-full mb-3">
-                          <label
-                            className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                            htmlFor="grid-password"
-                          >
-                            Bouquets
-                            </label>
-                          {bouquets.map(obj =>
-                            <label key={obj.value}>
-                              <input type="checkbox"
-                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
-                                {...register('bouquets[]')}
-                                value={obj.value}
-                              />
-                              {obj.text}
-                            </label>
-                          )}
                         </div>
                       </div>
                     </div>

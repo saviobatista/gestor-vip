@@ -8,9 +8,13 @@ import FooterAdmin from "components/Footers/FooterAdmin.js"
 import Link from "next/link"
 
 export default function Clientes() {
-	const { data, error } = useSWR('/api/clientes', (...args) => fetch(...args).then(res => res.json()))
+	const { data, error } = useSWR('/api/filmes', (...args) => fetch(...args).then(res => res.json()))
 	if (error) return <div>failed to load</div>
 	if (!data) return <div>loading...</div>
+
+	const action = e => {
+
+	}
 	return (
 		<>
 			<Sidebar />
@@ -118,9 +122,9 @@ export default function Clientes() {
 																<td><i className="fas fa-vol-up"></i></td>
 															</tr>
 															<tr>
-																<td>{obj.info.codecs?.video.width}x{obj.info.codecs?.video.height}</td>
-																<td>{obj.info.codecs?.video.codec_name}</td>
-																<td>{obj.info.codecs?.audio?.codec_name}</td>
+																<td>{obj.info?.codecs?.video.width}x{obj.info?.codecs?.video.height}</td>
+																<td>{obj.info?.codecs?.video.codec_name}</td>
+																<td>{obj.info?.codecs?.audio?.codec_name}</td>
 															</tr>
 														</table>
 													}
