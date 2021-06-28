@@ -10,12 +10,10 @@ import Link from "next/link"
 export default function Revendas() {
   const { data, error } = useSWR('/api/revendas', (...args) => fetch(...args).then(res => res.json()))
   if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
-  const action = (e) => {
-    useSWR('/api/revendas/' + parseInt(e.currentTarget.dataset.id) + '/' + e.currentTarget.dataset.oper)
-      .then(res => {
-        console.log(res)
-      })
+  if (!data) return <PageChange path="servidores" />
+  const action = async e => {
+    let data = await fetch('/api/revendas/' + parseInt(e.currentTarget.dataset.id) + '/' + e.currentTarget.dataset.oper).then(res => res.json())
+    alert(data.message)
   }
   return (
     <>
@@ -31,13 +29,13 @@ export default function Revendas() {
                 <div className="relative w-3/4 px-4 max-w-full flex-grow flex-1">
                   <h3 className="font-semibold text-base text-blueGray-700">
                     Revendas
-              </h3>
+                  </h3>
                 </div>
                 <div className="relative flex w-1/4 flex-wrap items-stretch">
-                          <Link href={'/revendas/create'}>
-                  <button className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                    + Novo
-                  </button></Link>
+                  <Link href={'/revendas/create'}>
+                    <button className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                      + Novo
+                    </button></Link>
                 </div>
               </div>
             </div>
@@ -66,9 +64,9 @@ export default function Revendas() {
                     <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">
                       Último acesso
                     </th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
+                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">&nbsp;</th>
+                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">&nbsp;</th>
+                    <th className="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-center">&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -76,7 +74,7 @@ export default function Revendas() {
                     return (
                       <tr>
                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                          <i className={`fas fa-circle text-${obj.status=='1'?'emerald':'red'}-500 mr-2`}></i>
+                          <i className={`fas fa-circle text-${obj.status == '1' ? 'emerald' : 'red'}-500 mr-2`}></i>
                           {obj.nome}
                         </th>
                         <td className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center text-${obj.latencia_color}-500`}>
@@ -105,14 +103,14 @@ export default function Revendas() {
                           </Link>
                         </td>
                         <td>
-                          {data.status==1?
-                          <button onClick={action} data-id={obj.id} data-oper='block' className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                          <i className="fas fa-lock"></i>
-                        </button>
-                        :
-                        <button onClick={action} data-id={obj.id} data-oper='unblock' className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                        <i className="fas fa-unlock-alt"></i>
-                      </button>
+                          {data.status == 1 ?
+                            <button onClick={action} data-id={obj.id} data-oper='block' className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                              <i className="fas fa-lock"></i>
+                            </button>
+                            :
+                            <button onClick={action} data-id={obj.id} data-oper='unblock' className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                              <i className="fas fa-unlock-alt"></i>
+                            </button>
                           }
                         </td>
                         <td>

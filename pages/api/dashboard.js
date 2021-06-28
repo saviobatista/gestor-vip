@@ -83,16 +83,16 @@ export default withSession(async (req, res) => {
       dados.input += parseInt(watchdog.bytes_received)
       dados.output += parseInt(watchdog.bytes_sent)
       dados.network += parseInt(row.network_guaranteed_speed)
-      dados.online_streams += parseInt(row.online_streams)
-      dados.offline_streams += parseInt(row.offline_streams)
+      dados.online_streams += parseInt(row.online)
+      dados.offline_streams += parseInt(row.offline)
     }
     //Estatisticas
     dados.input_percent = Math.floor(dados.input / (dados.network > 0 ? dados.network : 1) * 100)
     dados.output_percent = Math.floor(dados.output / (dados.network > 0 ? dados.network : 1) * 100)
     dados.input_label = dados.input + "Mbps"
     dados.output_label = dados.output + "Mbps"
-    dados.online_percent = Math.floor(dados.online_streams / (dados.online_streams + dados.offline_streams) * 100)
-    dados.offline_percent = Math.floor(dados.offline_streams / (dados.online_streams + dados.offline_streams) * 100)
+    dados.online_percent = parseInt(Math.floor(dados.online_streams / (dados.online_streams + dados.offline_streams) * 100))
+    dados.offline_percent = parseInt(Math.floor(dados.offline_streams / (dados.online_streams + dados.offline_streams) * 100))
     //Result
     res.json(dados)
   } catch (error) {

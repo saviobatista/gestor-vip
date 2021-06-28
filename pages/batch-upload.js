@@ -8,12 +8,26 @@ import { useRouter } from 'next/router'
 import AdminNavbar from "components/Navbars/AdminNavbar.js"
 import Sidebar from "components/Sidebar/Sidebar.js"
 import FooterAdmin from "components/Footers/FooterAdmin.js"
+import useSWR from "swr"
 
 export default function BachUploadForm() {
   const { handleSubmit, register, reset } = useForm()
   useEffect(() => {
   }, [reset])
   const onSubmit = handleSubmit(async (formData) => {
+    console.log(formData)
+    // const res = await fetch('/api/batch-upload', {
+    //   body: JSON.stringify({
+    //     name: event.target.name.value
+    //   }),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   method: 'POST'
+    // })
+
+    // const result = await res.json()
+    // result.user => 'Ada Lovelace')
   })
   return (
     <div>

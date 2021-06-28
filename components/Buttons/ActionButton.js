@@ -3,9 +3,7 @@ import React from "react";
 // components
 
 export default function ActionButton({ icon, color, action, id, oper}) {
-    const onClick = e => {
-        console.log(id)
-        action(e.target.dataset.oper,e.target.dataset.id)
+    const onClick = (e) => {
     }
   return (
     <>

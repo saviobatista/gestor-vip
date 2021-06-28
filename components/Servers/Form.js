@@ -1,27 +1,32 @@
 import React, { useEffect, useRef }  from "react"
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 // components
 import AdminNavbar from "components/Navbars/AdminNavbar.js"
 import Sidebar from "components/Sidebar/Sidebar.js"
 import FooterAdmin from "components/Footers/FooterAdmin.js"
 
 export default function Form({ id }) {
+  const router = useRouter()
   const { handleSubmit, register, reset } = useForm()
   useEffect(() => {
     fetch(`/api/servers/${id}`).then((r) => {
-      console.log('FETCH')
-      console.log(r)
       r.json().then(data => {
-        console.log(data)
         reset(data)
       })
     }).catch(error => {
-      console.log(error)
+      console.error(error)
       alert('ERRO AO CARREGAR ' + error)
     })
   }, [reset, id])
   const onSubmit = handleSubmit(async (formData) => {
+    fetch(`/api/servers/${id}/update`,{method:'post',body:JSON.stringify(formData)})
+    .then(r=>r.json().then(response=>{
+      alert(response.message); 
+      router.push('/servers')
+    }))
+    .catch(e=>console.error(e))
   })
   return (
     <div>
@@ -280,7 +285,7 @@ export default function Form({ id }) {
                             value='1'
                           />
                           <select
-                            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150"
+                            className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring ease-linear transition-all duration-150 ml-1 w-6/12"
                             {...register('geoip_type')}
                           >
                             <option value="low_priority">Prioridade baixa</option>
@@ -299,7 +304,7 @@ export default function Form({ id }) {
                             </label>
                           <select
                             className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                            {...register('geoip_countries[]')}
+                            {...register('geoip_countries[]')} defaultValue="ALL"
                           >
                             <option value="ALL">Todos</option>
                           </select>

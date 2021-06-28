@@ -35,7 +35,8 @@ export default withSession(async (req, res) => {
 				ip:row.server_ip,
 				conexoes:row.conexoes+' / '+row.total_clients,
 				cpu: parseInt(watchdog.cpu_avg),
-				mem: parseInt(watchdog.total_mem_used_percent)
+				mem: parseInt(watchdog.total_mem_used_percent),
+				principal: provedor.dbhost==row.server_ip
 			})
 		}
 		res.json(data)

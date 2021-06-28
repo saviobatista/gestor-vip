@@ -6,17 +6,19 @@ import AdminNavbar from "components/Navbars/AdminNavbar.js"
 import Sidebar from "components/Sidebar/Sidebar.js"
 import FooterAdmin from "components/Footers/FooterAdmin.js"
 import ActionButton from "components/Buttons/ActionButton.js"
+import Button from "components/Buttons/Button.js"
 import Link from "next/link"
+import Alert from "components/Widgets/Alert.js"
+
+import PageChange from "components/PageChange/PageChange.js";
 
 export default function Servidores() {
   const { data, error } = useSWR('/api/servers', (...args) => fetch(...args).then(res => res.json()))
   if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
-  const action = (e) => {
-    useSWR('/api/servers/' + parseInt(e.currentTarget.dataset.id) + '/' + e.currentTarget.dataset.oper)
-      .then(res => {
-        console.log(res)
-      })
+  if (!data) return <PageChange path="servidores" />
+  const acao = async e => {
+    let data = await fetch('/api/servers/'+ parseInt(e.currentTarget.dataset.id) + '/' + e.currentTarget.dataset.oper).then(res => res.json())
+    alert(data.message)
   }
   return (
     <>
@@ -89,10 +91,10 @@ export default function Servidores() {
                 <tbody>
                   {data.map((obj) => {
                     return (
-                      <tr>
+                      <tr key={obj.id}>
                         <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                          <i className={`fas fa-circle text-${obj.status=='Online'?'emerald':obj.status=='Offline'?'red':'orange'}-500 mr-2`}></i>
-                          {obj.nome}{obj.status!='Online'&&obj.status!='Offline'?' '+obj.status:''}
+                          <i className={`fas fa-circle text-${obj.status == 'Online' ? 'emerald' : obj.status == 'Offline' ? 'red' : 'orange'}-500 mr-2`}></i>
+                          {obj.nome}{obj.status != 'Online' && obj.status != 'Offline' ? ' ' + obj.status : ''}
                         </th>
                         <td className={`border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-center text-${obj.latencia_color}-500`}>
                           {obj.latencia}
@@ -133,31 +135,33 @@ export default function Servidores() {
                           </div>
                         </td>
                         <td>
-                          <button onClick={action} data-id={obj.id} data-oper='start' className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                            <i className="fas fa-play"></i>
+                          <button onClick={acao} data-id={obj.id} data-oper="start" className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-play" title="Iniciar"></i>
                           </button>
                         </td>
                         <td>
-                          <button onClick={action} data-id={obj.id} data-oper='stop' className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                            <i className="fas fa-stop"></i>
+                          <button onClick={acao} data-id={obj.id} data-oper="stop" className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-stop" title="Parar"></i>
                           </button>
                         </td>
                         <td>
-                          <button onClick={action} data-id={obj.id} data-oper='kill' className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                            <i className="fas fa-hammer"></i>
+                          <Link href={"/servers/"+obj.id+"/update"}>
+                          <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-pen" title="Editar"></i>
                           </button>
-                        </td>
-                        <td>
-                          <Link href={'/servers/' + obj.id + '/update'}>
-                            <button className="bg-teal-500 text-white active:bg-teal-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                              <i className="fas fa-pen"></i>
-                            </button>
                           </Link>
                         </td>
                         <td>
-                          <button onClick={action} data-id={obj.id} data-oper='delete' className="bg-orange-500 text-white active:bg-orange-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
-                            <i className="fas fa-trash"></i>
+                          <button onClick={acao} data-id={obj.id} data-oper="kill" className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-hammer" title="Forçar parada"></i>
                           </button>
+                        </td>
+                        <td>
+                          {!obj.principal?
+                          <button onClick={acao} data-id={obj.id} data-oper="delete" className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <i className="fas fa-trash" title="Apagar"></i>
+                          </button>
+                          :<span>&nbsp;</span>}
                         </td>
                       </tr>
                     )
