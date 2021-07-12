@@ -1,25 +1,25 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect } from "react"
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import fetcher from '../../lib/fetchJson'
 import useSWR from 'swr'
+import { useRouter } from 'next/router'
 // components
 import AdminNavbar from "components/Navbars/AdminNavbar.js"
 import Sidebar from "components/Sidebar/Sidebar.js"
 import FooterAdmin from "components/Footers/FooterAdmin.js"
 
 export default function RevendaForm({ id }) {
+  const router = useRouter()
   const { handleSubmit, register, reset } = useForm()
+  const apiUrl = typeof id == 'undefined' ? '/api/revenda/create' : `/api/revendas/${id}/update`
   useEffect(() => {
     if (id) fetch(`/api/revendas/${id}`).then((r) => {
-      console.log('FETCH')
-      console.log(r)
       r.json().then(data => {
-        console.log(data)
         reset(data)
       })
     }).catch(error => {
-      console.log(error)
+      console.error(error)
       alert('ERRO AO CARREGAR ' + error)
     })
   }, [reset, id])
@@ -31,8 +31,13 @@ export default function RevendaForm({ id }) {
   const owners = data
   if(!member_groups||!owners)return ( <p>Carregando...</p> )
   const onSubmit = handleSubmit(async (formData) => {
-    return false
-    console.log(formData)
+    console.log(apiUrl)
+    fetch(apiUrl,{method:'post',body:JSON.stringify(formData)})
+    .then(r=>r.json().then(response=>{
+      alert(response.message); 
+      router.push('/revendas')
+    }))
+    .catch(e=>console.error(e))
   })
   return (
     <div>

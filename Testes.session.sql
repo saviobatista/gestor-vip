@@ -1,0 +1,1 @@
+INSERT INTO `reg_userlog` (`owner_id`, `username`, `password`, `date`, `type`) SELECT `owner_id`, `username`, `password`, NOW(), '[<b>UserPanel</b> -> <u>Delete Subreseller</u>]' FROM `reg_users` WHERE `id` = 2 LIMIT 1;

@@ -17,8 +17,8 @@ export default function Servidores() {
   if (error) return <div>failed to load</div>
   if (!data) return <PageChange path="servidores" />
   const acao = async e => {
-    let data = await fetch('/api/servers/'+ parseInt(e.currentTarget.dataset.id) + '/' + e.currentTarget.dataset.oper).then(res => res.json())
-    alert(data.message)
+    const { message } = await fetch('/api/servers/'+ parseInt(e.currentTarget.dataset.id) + '/' + e.currentTarget.dataset.oper).then(res => res.json())
+    alert(message)
   }
   return (
     <>

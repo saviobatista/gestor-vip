@@ -1,19 +1,25 @@
 import React from "react"
 import useSWR from 'swr'
+import Link from "next/link"
+import { useRouter } from 'next/router'
 
 // components
 import AdminNavbar from "components/Navbars/AdminNavbar.js"
 import Sidebar from "components/Sidebar/Sidebar.js"
 import FooterAdmin from "components/Footers/FooterAdmin.js"
-import Link from "next/link"
+import PageChange from "components/PageChange/PageChange.js"
 
 export default function Revendas() {
+  const Router = useRouter()
   const { data, error } = useSWR('/api/revendas', (...args) => fetch(...args).then(res => res.json()))
   if (error) return <div>failed to load</div>
-  if (!data) return <PageChange path="servidores" />
+  if (!data) return <PageChange path="Carregando dados das revendas..." />
   const action = async e => {
-    let data = await fetch('/api/revendas/' + parseInt(e.currentTarget.dataset.id) + '/' + e.currentTarget.dataset.oper).then(res => res.json())
-    alert(data.message)
+    if (e.currentTarget.dataset.oper != 'delete' ^ confirm("Tem certeza que deseja excluir o registro?\nEsta ação é irreversível!!!")) {
+      const { message } = await fetch('/api/revendas/' + parseInt(e.currentTarget.dataset.id) + '/' + e.currentTarget.dataset.oper).then(res => res.json())
+      Router.push('/revendas')
+      alert(message)
+    }
   }
   return (
     <>
@@ -97,24 +103,23 @@ export default function Revendas() {
                         </td>
                         <td>
                           <Link href={'/revendas/' + obj.id + '/update'}>
-                            <button className="bg-teal-500 text-white active:bg-teal-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            <button className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                               <i className="fas fa-pen"></i>
                             </button>
                           </Link>
                         </td>
                         <td>
-                          {data.status == 1 ?
-                            <button onClick={action} data-id={obj.id} data-oper='block' className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                          {obj.status == 1 ?
+                            <button onClick={action} data-id={obj.id} data-oper='disable' className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                               <i className="fas fa-lock"></i>
                             </button>
-                            :
-                            <button onClick={action} data-id={obj.id} data-oper='unblock' className="bg-purple-500 text-white active:bg-purple-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                            : <button onClick={action} data-id={obj.id} data-oper='enable' className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                               <i className="fas fa-unlock-alt"></i>
                             </button>
                           }
                         </td>
                         <td>
-                          <button onClick={action} data-id={obj.id} data-oper='delete' className="bg-orange-500 text-white active:bg-orange-600 font-bold uppercase text-xs px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                          <button onClick={action} data-id={obj.id} data-oper='delete' className="text-blueGray-500 background-transparent font-bold uppercase px-3 py-1 text-xs outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                             <i className="fas fa-trash"></i>
                           </button>
                         </td>
